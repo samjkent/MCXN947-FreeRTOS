@@ -29,7 +29,13 @@ add_project_arguments('-DCPU_MCXN947VDF_cm33_core0', language: 'c')
 
 mcux_sdk_inc = include_directories(
     'lib/mcux-sdk/devices',
-    'lib/mcux-sdk/boards/frdmmcxn947'
+    'lib/mcux-sdk/boards/frdmmcxn947',
+    'lib/mcux-sdk/drivers/gpio',
+    'lib/mcux-sdk/drivers/common',
+    'lib/mcux-sdk/devices/MCXN947',
+    'lib/mcux-sdk/devices/MCXN947/drivers',
+    'lib/mcux-sdk/drivers/port'
+
 )
 
 # Source files for FreeRTOS
@@ -52,15 +58,20 @@ cmsis_src = files(
 # Source files for MCUX-SDK
 mcux_sdk_src = files(
     'lib/mcux-sdk/devices/MCXN947/system_MCXN947_cm33_core0.c',
-    'lib/mcux-sdk/devices/MCXN947/gcc/startup_MCXN947_cm33_core0.S'
+    'lib/mcux-sdk/devices/MCXN947/gcc/startup_MCXN947_cm33_core0.S',
+    'lib/mcux-sdk/drivers/gpio/fsl_gpio.c',
+    'lib/mcux-sdk/drivers/common/fsl_common.c'
 )
 
 # Application source
-main_src = files('src/main.c')
+main_src = files(
+    'src/main.c',
+    'src/blinky.c'
+)
 
 # Define the executable
 executable(
-    'freertos_project',
+    'freertos_project.elf',
     sources : [main_src, freertos_src, cmsis_src, mcux_sdk_src],
     include_directories : [freertos_inc, cmsis_inc, mcux_sdk_inc],
     c_args : c_args,
