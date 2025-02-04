@@ -1,5 +1,7 @@
+#include "MCXN947_cm33_core0.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "blinky.h"
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
     // Print the task name causing the overflow
@@ -23,8 +25,8 @@ void vTask2(void *pvParameters) {
 }
 
 int main(void) {
-    xTaskCreate(vTask1, "Task1", 1000, NULL, 1, NULL);
-    xTaskCreate(vTask2, "Task2", 1000, NULL, 1, NULL);
+
+    xTaskCreate(vBlinkyTask, "Blinky", 256, NULL, 2, NULL);
 
     vTaskStartScheduler();
 
