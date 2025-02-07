@@ -7,7 +7,7 @@
 #include "task.h"
 
 void LED_Init(void) {
-    CLOCK_EnableClock(kCLOCK_Gpio1);
+    CLOCK_EnableClock(LED_CLOCK);
 
     gpio_pin_config_t gpio_config = {kGPIO_DigitalOutput, 0};
     GPIO_PinInit(LED_PORT, LED_PIN , &gpio_config);
@@ -18,6 +18,8 @@ void LED_Toggle(void) {
 }
 
 void vBlinkyTask(void *pvParameters) {
+    (void) pvParameters;
+
     LED_Init();
 
     while (1) {
