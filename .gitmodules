@@ -7,3 +7,9 @@
 [submodule "lib/cmsis"]
 	path = lib/cmsis
 	url = git@github.com:ARM-software/CMSIS_5.git
+[submodule "lib/tflite-micro"]
+	path = lib/tflite-micro
+	url = git@github.com:tensorflow/tflite-micro.git
+[submodule "lib/flatbuffers"]
+	path = lib/flatbuffers
+	url = git@github.com:google/flatbuffers.git

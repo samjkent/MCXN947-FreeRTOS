@@ -1,11 +1,9 @@
 #ifndef BLINKY_H
 #define BLINKY_H
 
-#include "fsl_gpio.h"
-
 // LED Pin Definitions
-#define LED_PORT       GPIO1
-#define LED_PIN        2  // Adjust for your board
+#define LED_PORT GPIO1
+#define LED_PIN 2 // Adjust for your board
 
 // Function Prototypes
 void LED_Init(void);

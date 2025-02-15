@@ -3,3 +3,4 @@ if [ ! -d "build" ]; then
   meson setup build --cross-file=arm-gcc.txt
 fi
 cd build && ninja
+chmod 775 compile_commands.json
