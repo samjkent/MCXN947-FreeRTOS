@@ -1,11 +1,10 @@
 ELF_FILE := "build/freertos_project.elf"
-COMPILE_COMMANDS := "build/compile_commands.json"
 
 setup:
   docker build -t arm-gcc-env .
 
 build:
-  docker run --user $(id -u):$(id -g) --volume "$(pwd)":"$(pwd)" --workdir "$(pwd)" arm-gcc-env
+  docker run -t --user $(id -u):$(id -g) --volume "$(pwd)":"$(pwd)" --workdir "$(pwd)" arm-gcc-env
 
 alias b := build
 

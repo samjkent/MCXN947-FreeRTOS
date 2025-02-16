@@ -4,12 +4,18 @@
 [submodule "lib/mcux-sdk"]
 	path = lib/mcux-sdk
 	url = git@github.com:nxp-mcuxpresso/mcux-sdk.git
-[submodule "lib/cmsis"]
-	path = lib/cmsis
-	url = git@github.com:ARM-software/CMSIS_5.git
-[submodule "lib/tflite-micro"]
-	path = lib/tflite-micro
-	url = git@github.com:tensorflow/tflite-micro.git
 [submodule "lib/flatbuffers"]
 	path = lib/flatbuffers
 	url = git@github.com:google/flatbuffers.git
+[submodule "lib/gemmlowp"]
+	path = lib/gemmlowp
+	url = git@github.com:google/gemmlowp.git
+[submodule "lib/cmsis-nn"]
+	path = lib/cmsis-nn
+	url = git@github.com:ARM-software/CMSIS-NN.git
+[submodule "lib/kissfft"]
+	path = lib/kissfft
+	url = git@github.com:mborgerding/kissfft.git
+[submodule "lib/cmsis"]
+	path = lib/cmsis
+	url = git@github.com:ARM-software/CMSIS_6.git

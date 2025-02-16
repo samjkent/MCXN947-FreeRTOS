@@ -586,14 +586,14 @@
  * to enable the TrustZone support in FreeRTOS ARMv8-M ports which allows the
  * non-secure FreeRTOS tasks to call the (non-secure callable) functions
  * exported from secure side. */
-#define configENABLE_TRUSTZONE 1
+#define configENABLE_TRUSTZONE 0
 
 /* If the application writer does not want to use TrustZone, but the hardware
  * does not support disabling TrustZone then the entire application (including
  * the FreeRTOS scheduler) can run on the secure side without ever branching to
  * the non-secure side. To do that, in addition to setting
  * configENABLE_TRUSTZONE to 0, also set configRUN_FREERTOS_SECURE_ONLY to 1. */
-#define configRUN_FREERTOS_SECURE_ONLY 0
+#define configRUN_FREERTOS_SECURE_ONLY 1
 
 /* Set configENABLE_MPU to 1 to enable the Memory Protection Unit (MPU), or 0
  * to leave the Memory Protection Unit disabled. */

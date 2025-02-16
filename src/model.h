@@ -1,7 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "tensorflow/lite/micro/micro_interpreter.h"
 #include <stdint.h>
 
 // Shared memory buffer for the input image (updated by another task)
