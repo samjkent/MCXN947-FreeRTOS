@@ -24,7 +24,7 @@ add_project_arguments(
 '-DTFLITE_STRIP_ERROR_STRINGS',
 '-DTF_LITE_DISABLE_DEFAULT_REPORT_ERRORS',
 '-DTF_LITE_STATIC_MEMORY',
-'-DCMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE="core_cm33.h"',
+'-DCMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE="ARMCM33.h"',
 '-DTF_LITE_DISABLE_X86_NEON',
 language: 'cpp'
 )
@@ -48,6 +48,7 @@ tflite_inc = include_directories(
 
 cmsis_inc = include_directories(
     'lib/cmsis/CMSIS/Core/Include',
+    'lib/cmsis/Device/ARM/ARMCM33/Include/'
 )
 
 tflite_src = files(
