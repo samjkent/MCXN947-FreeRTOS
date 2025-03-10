@@ -10,12 +10,12 @@ project(
 toolchain = 'arm-none-eabi-'
 cc = meson.get_compiler('c')
 cpp = meson.get_compiler('cpp')
-c_args = ['-lnosys', '--specs=nano.specs', '-Os', '-ffunction-sections', '-fdata-sections']
-cpp_args = ['-lnosys', '--specs=nano.specs', '-std=c++17', '-Os', '-ffunction-sections', '-fdata-sections']
+c_args = ['-lnosys', '--specs=nosys.specs', '-Os', '-ffunction-sections', '-fdata-sections']
+cpp_args = ['-lnosys', '--specs=nosys.specs', '-std=c++17', '-Os', '-ffunction-sections', '-fdata-sections', '-fno-rtti', '-Wno-unused-parameter']
 ld_args = [
-  '-T', '../lib/mcux-sdk/devices/MCXN947/gcc/MCXN947_cm33_core0_flash_s.ld',
+  '-T', '../lib/mcux-sdk/devices/MCXN947/gcc/MCXN947_cm33_core0_flash.ld',
   '-mcpu=cortex-m33', '-mthumb', '-mfloat-abi=soft',
-  '-lc', '-lstdc++', '-lnosys', '--specs=nano.specs',
+  '-lc', '-lstdc++', '-lnosys', '--specs=nosys.specs',
 ]
 
 
@@ -44,6 +44,7 @@ tflite_inc = include_directories(
     'lib/tflm-cmsis/third_party/ruy',
     'lib/tflm-cmsis/third_party/kissfft',
     'model',
+    'lib/tflm-cmsis/third_party/cmsis_nn',
 )
 
 cmsis_inc = include_directories(
@@ -116,7 +117,6 @@ tflite_src = files(
 'lib/tflm-cmsis/tensorflow/lite/micro/fake_micro_context.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/flatbuffer_utils.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/hexdump.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/hexdump_test.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/kernels/activations.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/kernels/activations_common.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/kernels/add_common.cc',
@@ -230,24 +230,18 @@ tflite_src = files(
 'lib/tflm-cmsis/tensorflow/lite/micro/memory_planner/linear_memory_planner.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/memory_planner/non_persistent_buffer_planner_shim.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_allocation_info.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/micro_allocator.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_context.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_interpreter.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_interpreter_context.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/micro_interpreter_graph.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_log.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_op_resolver.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_profiler.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/micro_resource_variable.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/micro_utils.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/mock_micro_graph.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/models/person_detect_model_data.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/recording_micro_allocator.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/system_setup.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/test_helper_custom_ops.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/test_helpers.cc',
 'lib/tflm-cmsis/tensorflow/lite/micro/tflite_bridge/flatbuffer_conversions_bridge.cc',
-'lib/tflm-cmsis/tensorflow/lite/micro/tflite_bridge/micro_error_reporter.cc',
 )
 
 add_project_arguments('-DCPU_MCXN947VDF_cm33_core0', language: ['c', 'cpp'])
