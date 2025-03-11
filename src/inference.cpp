@@ -4,6 +4,7 @@
 #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 #include <iostream>
+#include "inference.h"
 
 constexpr int kTensorArenaSize = 100 * 1024; // 100KB (adjust as needed)
 uint8_t tensor_arena[kTensorArenaSize];

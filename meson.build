@@ -286,8 +286,8 @@ mcux_sdk_src = files(
 main_src = files(
     'src/main.c',
     'src/blinky.c',
-    'src/model.c',
     'src/inference.cpp',
+    'src/model.c',
 )
 
 # Define the executable

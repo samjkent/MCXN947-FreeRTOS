@@ -2,16 +2,17 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include <stdio.h>
+#include "inference.h"
 
 // Task handle
 TaskHandle_t xInferTaskHandle = NULL;
 
 // FreeRTOS task for inference
-void InferenceTask(void *pvParameters) {
+void vInferenceTask(void *pvParameters) {
   // printf("Initializing TensorFlow Lite Model...\n");
 
   // Initialize the TFLite model
-  // init_model();
+  init_model();
 
   while (1) {
     // Wait for notification to start inference

@@ -6,8 +6,7 @@
 // Shared memory buffer for the input image (updated by another task)
 extern volatile uint8_t image_buffer[244][244][3];
 
-// Function to initialize the TensorFlow model
-void init_model();
+void vInferenceTask(void *pvParameters);
 
 // Function to run inference (returns classification result)
 int run_inference();
