@@ -15,7 +15,7 @@ TfLiteTensor *input = nullptr;
 
 int init_model() {
   // Load model from memory
-  model = tflite::GetModel(cat_tflite);
+  model = tflite::GetModel(tflite_model);
   if (model->version() != TFLITE_SCHEMA_VERSION) {
     // loge("Model provided is schema version %d not equal to supported "
     // "version %d.", model->version(), TFLITE_SCHEMA_VERSION);
