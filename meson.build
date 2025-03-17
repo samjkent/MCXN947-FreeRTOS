@@ -13,7 +13,7 @@ cpp = meson.get_compiler('cpp')
 c_args = ['-lnosys', '--specs=nosys.specs', '-Os', '-ffunction-sections', '-fdata-sections']
 cpp_args = ['-lnosys', '--specs=nosys.specs', '-std=c++17', '-Os', '-ffunction-sections', '-fdata-sections', '-fno-rtti', '-Wno-unused-parameter', '-fno-exceptions']
 ld_args = [
-  '-T', '../lib/mcux-sdk/devices/MCXN947/gcc/MCXN947_cm33_core0_flash_ns.ld',
+  '-T', '../config/MCXN947_cm33_core0_flash_ns.ld',
   '-mcpu=cortex-m33', '-mthumb', '-mfloat-abi=soft',
   '-lc', '-lstdc++', '-lnosys', '--specs=nosys.specs'
 ]
