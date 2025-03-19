@@ -74,12 +74,6 @@ SECTIONS
     . = ALIGN(4);
   } > m_interrupts
 
-  /* Use this to store data in the qspi external flash */
-  .qspi_data :
-  {
-      KEEP(*(.qspi_data)) /* Ensure linker doesn't discard this section */
-  } > m_flash1
-
   /* The program code and other data goes into internal flash */
   .text :
   {

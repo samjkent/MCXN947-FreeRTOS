@@ -11,6 +11,9 @@ alias b := build
 flash: build
   /usr/local/LinkServer_24.12.21/LinkServer flash --probe 0Q5BWDEVI42LX MCXN947:FRDM-MCXN947 load {{ELF_FILE}}
 
+erase:
+  /usr/local/LinkServer_24.12.21/LinkServer flash --probe 0Q5BWDEVI42LX MCXN947:FRDM-MCXN947 erase
+
 debug: build
   ./scripts/debug.sh {{ELF_FILE}}
 

@@ -28,7 +28,7 @@ void vTask2(void *pvParameters) {
 int main(void) {
 
     xTaskCreate(vBlinkyTask, "Blinky", 256, NULL, 2, NULL);
-    xTaskCreate(vInferenceTask, "Inference", 256, NULL, 2, NULL);
+    // xTaskCreate(vInferenceTask, "Inference", 256, NULL, 2, NULL);
 
     vTaskStartScheduler();
 
