@@ -31,17 +31,20 @@ HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x0400;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0800;
 RPMSG_SHMEM_SIZE = DEFINED(__use_shmem__) ? 0x2000 : 0;
 
+TEXT_START = DEFINED(__qspi_xip__)  ? 0x80001000 : 0x00000000; /* flexspi boot image start with 0x80000000 */
+TEXT_SIZE = DEFINED(__qspi_xip__)  ? 0x0FFFF000 : 0x000C0000; /* flexspi boot image offset at 0x80001000 */
+
 /* Specify the memory areas */
 MEMORY
 {
-  m_interrupts          (RX)  : ORIGIN = 0x00020000, LENGTH = 0x00000400
-  m_text                (RX)  : ORIGIN = 0x00020400, LENGTH = 0x0009FC00
+  m_interrupts          (RX)  : ORIGIN = TEXT_START, LENGTH = 0x00000400
+  m_text                (RX)  : ORIGIN = TEXT_START + 0x00000400, LENGTH = TEXT_SIZE - 0x00000400
   m_core1_image         (RX)  : ORIGIN = 0x000C0000, LENGTH = 0x00040000
-  m_data                (RW)  : ORIGIN = 0x20008000, LENGTH = 0x00046000 - RPMSG_SHMEM_SIZE
-  rpmsg_sh_mem          (RW)  : ORIGIN = 0x2004C000, LENGTH = RPMSG_SHMEM_SIZE
+  m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = 0x0004E000 - RPMSG_SHMEM_SIZE
+  rpmsg_sh_mem          (RW)  : ORIGIN = 0x2004E000 - RPMSG_SHMEM_SIZE, LENGTH = RPMSG_SHMEM_SIZE
   m_flash1              (RX)  : ORIGIN = 0x00100000, LENGTH = 0x00100000
   m_sramx               (RW)  : ORIGIN = 0x04000000, LENGTH = 0x00018000
-
+  m_flash_config        (RX)  : ORIGIN = 0x80000400, LENGTH = 0x00000200
   m_usb_sram            (RW)  : ORIGIN = 0x400BA000, LENGTH = 0x00001000
 }
 
@@ -66,6 +69,14 @@ SECTIONS
      __RPMSG_SH_MEM_END__ = .;
   } > rpmsg_sh_mem
 
+  .flash_config :
+  {
+    . = ALIGN(4);
+    __FLASH_BASE = .;
+    KEEP(* (.flexspi_fcb))     /* FCB section */
+    . = ALIGN(4);
+  } > m_flash_config
+
   /* The startup code goes first into internal flash */
   .interrupts :
   {
@@ -89,7 +100,6 @@ SECTIONS
     KEEP (*(.fini))
     . = ALIGN(4);
   } > m_text
-
 
   .ARM.extab :
   {
@@ -185,7 +195,7 @@ SECTIONS
   text_end = ORIGIN(m_text) + LENGTH(m_text);
   ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
 
-  /* Uninitialized data section */
+/* Uninitialized data section */
   .bss :
   {
     /* This is used by the startup in order to initialize the .bss section */
@@ -227,6 +237,12 @@ SECTIONS
   {
     *(m_usb_global)
   } > m_usb_sram
+
+  /* Use this to store data in the qspi external flash */
+  .qspi_data :
+  {
+      KEEP(*(.qspi_data)) /* Ensure linker doesn't discard this section */
+  } > m_flash1
 
   /* Initializes stack on the end of block */
   __StackTop   = ORIGIN(m_data) + LENGTH(m_data);

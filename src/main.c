@@ -3,6 +3,9 @@
 #include "task.h"
 #include "blinky.h"
 #include "model.h"
+#include "clock_config.h"
+#include "flexspi.h"
+#include "stdio.h"
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
     // Print the task name causing the overflow
@@ -27,8 +30,14 @@ void vTask2(void *pvParameters) {
 
 int main(void) {
 
+    BOARD_BootClockFROHF48M();
+    BOARD_InitDEBUG_UARTPins();
+    printf("hello, world!");
+
+    flexspi_init();
+
     xTaskCreate(vBlinkyTask, "Blinky", 256, NULL, 2, NULL);
-    // xTaskCreate(vInferenceTask, "Inference", 256, NULL, 2, NULL);
+    xTaskCreate(vInferenceTask, "Inference", 2048, NULL, 2, NULL);
 
     vTaskStartScheduler();
 

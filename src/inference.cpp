@@ -31,6 +31,13 @@ int init_model() {
   resolver.AddDepthwiseConv2D();
   resolver.AddFullyConnected();
   resolver.AddSoftmax();
+  resolver.AddConv2D();
+  resolver.AddDepthwiseConv2D();
+  resolver.AddFullyConnected();
+  resolver.AddRelu(); // optional if fused
+  resolver.AddPad();
+  resolver.AddAdd();
+  resolver.AddMean();
 
   // Build an interpreter to run the model with.
   static tflite::MicroInterpreter static_interpreter(

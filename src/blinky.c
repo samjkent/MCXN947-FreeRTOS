@@ -5,6 +5,7 @@
 #include "task.h"
 
 void LED_Init(void) {
+  CLOCK_EnableClock(kCLOCK_Gpio0);
   CLOCK_EnableClock(kCLOCK_Gpio1);
 
   gpio_pin_config_t gpio_config = {kGPIO_DigitalOutput, 0};
