@@ -141,6 +141,10 @@ tflite_src = files(
   'lib/tflm-cmsis/third_party/cmsis_nn/Source/SoftmaxFunctions/arm_softmax_s8.c',
   'lib/tflm-cmsis/third_party/cmsis_nn/Source/SoftmaxFunctions/arm_softmax_s8_s16.c',
   'lib/tflm-cmsis/tensorflow/lite/micro/cortex_m_generic/debug_log.cc',
+  'lib/tflm-cmsis/tensorflow/lite/micro/kernels/quantize.cc',
+  'lib/tflm-cmsis/tensorflow/lite/micro/kernels/quantize_common.cc',
+  'lib/tflm-cmsis/tensorflow/lite/micro/kernels/logistic.cc',
+  'lib/tflm-cmsis/tensorflow/lite/micro/kernels/logistic_common.cc',
 )
 
 cmsis_inc = include_directories(

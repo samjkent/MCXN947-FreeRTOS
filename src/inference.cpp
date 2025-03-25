@@ -6,7 +6,7 @@
 #include <iostream>
 #include "inference.h"
 
-constexpr int kTensorArenaSize = 100 * 1024; // 100KB (adjust as needed)
+constexpr int kTensorArenaSize = 40 * 1024; // 400KB (adjust as needed)
 uint8_t tensor_arena[kTensorArenaSize];
 
 const tflite::Model *model = nullptr;
@@ -23,7 +23,7 @@ int init_model() {
   }
 
   // Declare the op resolver and register only the necessary operations
-  static tflite::MicroMutableOpResolver<4>
+  static tflite::MicroMutableOpResolver<10>
       resolver; // Adjust NUM_OPS based on the model
 
   // Register required TensorFlow Lite operations used in your model
@@ -35,6 +35,8 @@ int init_model() {
   resolver.AddPad();
   resolver.AddRelu(); // optional if fused
   resolver.AddSoftmax();
+  resolver.AddQuantize();
+  resolver.AddLogistic();
 
   // Build an interpreter to run the model with.
   static tflite::MicroInterpreter static_interpreter(

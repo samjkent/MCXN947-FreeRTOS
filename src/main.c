@@ -10,7 +10,7 @@
 #include "uart.h"
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
-    // Print the task name causing the overflow
+    loge("vApplicationStackOverflowHook: %s", pcTaskName);
 
     // Take appropriate actions (e.g., reset the system, log an error, etc.)
     for (;;);

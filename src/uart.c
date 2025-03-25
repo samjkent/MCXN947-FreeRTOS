@@ -43,6 +43,8 @@ void uart_init() {
 int uart_printf(const char *format, ...)
 {
     char buffer[UART_PRINTF_BUFFER_SIZE];
+    buffer[0] = 0;
+
     va_list args;
     va_start(args, format);
 
