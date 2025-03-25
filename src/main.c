@@ -6,19 +6,14 @@
 #include "clock_config.h"
 #include "flexspi.h"
 #include "stdio.h"
+#include "pin_mux.h"
+#include "uart.h"
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
     // Print the task name causing the overflow
 
     // Take appropriate actions (e.g., reset the system, log an error, etc.)
     for (;;);
-}
-
-void vTask1(void *pvParameters) {
-    while (1) {
-        // Task 1 code
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
 }
 
 void vTask2(void *pvParameters) {
@@ -28,16 +23,24 @@ void vTask2(void *pvParameters) {
     }
 }
 
-int main(void) {
+void vTask1(void *pvParameters) {
+  uart_printf("Test");
+  while (1) {
+    // Task 1 code
+    vTaskDelay(pdMS_TO_TICKS(1000));
 
+  }
+}
+
+int main(void) {
+    
     BOARD_BootClockFROHF48M();
     BOARD_InitDEBUG_UARTPins();
-    printf("hello, world!");
-
     flexspi_init();
+    uart_init();
 
-    xTaskCreate(vBlinkyTask, "Blinky", 256, NULL, 2, NULL);
-    xTaskCreate(vInferenceTask, "Inference", 2048, NULL, 2, NULL);
+    xTaskCreate(vInferenceTask, "Inference", 512, NULL, 3, NULL);
+    xTaskCreate(vBlinkyTask, "Blinky", 256, NULL, 3, NULL);
 
     vTaskStartScheduler();
 

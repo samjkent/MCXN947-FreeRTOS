@@ -27,17 +27,14 @@ int init_model() {
       resolver; // Adjust NUM_OPS based on the model
 
   // Register required TensorFlow Lite operations used in your model
-  resolver.AddConv2D();
-  resolver.AddDepthwiseConv2D();
-  resolver.AddFullyConnected();
-  resolver.AddSoftmax();
-  resolver.AddConv2D();
-  resolver.AddDepthwiseConv2D();
-  resolver.AddFullyConnected();
-  resolver.AddRelu(); // optional if fused
-  resolver.AddPad();
   resolver.AddAdd();
+  resolver.AddConv2D();
+  resolver.AddDepthwiseConv2D();
+  resolver.AddFullyConnected();
   resolver.AddMean();
+  resolver.AddPad();
+  resolver.AddRelu(); // optional if fused
+  resolver.AddSoftmax();
 
   // Build an interpreter to run the model with.
   static tflite::MicroInterpreter static_interpreter(

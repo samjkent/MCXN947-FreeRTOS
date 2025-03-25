@@ -20,7 +20,6 @@ ld_args = [
 
 add_project_arguments(
 '-DCMSIS_NN',
-'-DTFLITE_STRIP_ERROR_STRINGS',
 '-DTF_LITE_DISABLE_DEFAULT_REPORT_ERRORS',
 '-DTF_LITE_STATIC_MEMORY',
 '-DCMSIS_DEVICE_ARM_CORTEX_M_XX_HEADER_FILE="ARMCM33.h"',
@@ -29,6 +28,8 @@ add_project_arguments(
 '-DSERIAL_PORT_TYPE_UART',
 language: ['cpp','c'],
 )
+
+# '-DTF_LITE_STRIP_ERROR_STRINGS',
 
 tflite_inc = include_directories(
     'lib/tflm-cmsis/',
@@ -39,6 +40,7 @@ tflite_inc = include_directories(
     'model',
     'lib/tflm-cmsis/third_party/cmsis_nn',
     'lib/tflm-cmsis/third_party/cmsis_nn/Include/',
+    'lib/tflm-cmsis/tensorflow/lite/micro/cortex_m_generic',
 )
 
 tflite_src = files(
@@ -52,7 +54,6 @@ tflite_src = files(
   'lib/tflm-cmsis/tensorflow/lite/micro/micro_utils.cc',
   'lib/tflm-cmsis/tensorflow/lite/kernels/kernel_util.cc',
   'lib/tflm-cmsis/tensorflow/lite/micro/arena_allocator/single_arena_buffer_allocator.cc',
-  'lib/tflm-cmsis/tensorflow/lite/micro/cortex_m_generic/debug_log.cc',
   'lib/tflm-cmsis/tensorflow/lite/micro/flatbuffer_utils.cc',
   'lib/tflm-cmsis/tensorflow/lite/micro/kernels/activations_common.cc',
   'lib/tflm-cmsis/third_party/cmsis_nn/Source/BasicMathFunctions/arm_elementwise_add_s8.c',
@@ -139,6 +140,7 @@ tflite_src = files(
   'lib/tflm-cmsis/third_party/cmsis_nn/Source/SoftmaxFunctions/arm_softmax_s16.c',
   'lib/tflm-cmsis/third_party/cmsis_nn/Source/SoftmaxFunctions/arm_softmax_s8.c',
   'lib/tflm-cmsis/third_party/cmsis_nn/Source/SoftmaxFunctions/arm_softmax_s8_s16.c',
+  'lib/tflm-cmsis/tensorflow/lite/micro/cortex_m_generic/debug_log.cc',
 )
 
 cmsis_inc = include_directories(
@@ -181,6 +183,8 @@ mcux_sdk_inc = include_directories(
     'lib/mcux-sdk/devices/MCXN947/drivers',
     'lib/mcux-sdk/drivers/port',
     'lib/mcux-sdk/drivers/flexspi',
+    'lib/mcux-sdk/drivers/lpflexcomm/lpuart',
+    'lib/mcux-sdk/drivers/lpflexcomm/',
     'lib/mcux-sdk/drivers/mcx_spc/',
 )
 
@@ -193,6 +197,9 @@ mcux_sdk_src = files(
     'lib/mcux-sdk/drivers/flexspi/fsl_flexspi.c',
     'lib/mcux-sdk/drivers/gpio/fsl_gpio.c',
     'lib/mcux-sdk/drivers/mcx_spc/fsl_spc.c',
+    'lib/mcux-sdk/drivers/lpflexcomm/lpuart/fsl_lpuart.c',
+    'lib/mcux-sdk/drivers/lpflexcomm/lpuart/fsl_lpuart_freertos.c',
+    'lib/mcux-sdk/drivers/lpflexcomm/fsl_lpflexcomm.c',
 )
 
 # Application source
@@ -205,9 +212,10 @@ main_src = files(
     'src/clock_config.c',
     'src/flexspi.c',
     'src/inference.cpp',
-    'src/main.c',
     'src/model.c',
     'src/pin_mux.c',
+    'src/uart.c',
+    'src/main.c',
 )
 
 # Define the executable

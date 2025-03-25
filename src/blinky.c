@@ -3,6 +3,7 @@
 #include "fsl_clock.h"
 #include "fsl_gpio.h"
 #include "task.h"
+#include "uart.h"
 
 void LED_Init(void) {
   CLOCK_EnableClock(kCLOCK_Gpio0);
@@ -16,6 +17,8 @@ void LED_Toggle(void) { GPIO_PortToggle(LED_PORT, 1 << LED_PIN); }
 
 void vBlinkyTask(void *pvParameters) {
   LED_Init();
+
+  logi("Blinky started");
 
   while (1) {
     LED_Toggle();

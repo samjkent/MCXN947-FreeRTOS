@@ -3,17 +3,26 @@
 #include "task.h"
 #include <stdio.h>
 #include "inference.h"
+#include "debug_log_callback.h"
+#include "uart.h"
 
 // Task handle
 TaskHandle_t xInferTaskHandle = NULL;
 
+void tflite_print(const char *string)
+{
+  return uart_printf(string);
+}
+
 // FreeRTOS task for inference
 void vInferenceTask(void *pvParameters) {
-  // printf("Initializing TensorFlow Lite Model...\n");
-
   // Initialize the TFLite model
-  init_model();
 
+  logi("Registering debug_log_callback");
+  RegisterDebugLogCallback(tflite_print);
+
+  init_model();
+ 
   while (1) {
     // Wait for notification to start inference
     uint32_t ulNotificationValue;
