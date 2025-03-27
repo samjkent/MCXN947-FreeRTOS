@@ -26,15 +26,16 @@ void vInferenceTask(void *pvParameters) {
   while (1) {
     // Wait for notification to start inference
     uint32_t ulNotificationValue;
-    if (xTaskNotifyWait(0, 0, &ulNotificationValue, portMAX_DELAY) == pdTRUE) {
-      // printf("Running inference on new image...\n");
+    // if (xTaskNotifyWait(0, 0, &ulNotificationValue, portMAX_DELAY) == pdTRUE) {
+      logi("Running inference on new image");
 
       // Run the model inference
       // int result = run_inference();
 
       // Print the classification result
       // printf("Inference result: %d\n", result);
-    }
+    // }
+    vTaskDelay(pdMS_TO_TICKS(500));
   }
 }
 
