@@ -1,6 +1,7 @@
 #include "uart.h"
 #include "MCXN947_cm33_core0.h"
 #include <stdarg.h>
+#include <stdio.h>
 #include "clock_config.h"
 
 #define UART_PRINTF_BUFFER_SIZE 128
@@ -53,7 +54,14 @@ int uart_printf(const char *format, ...)
     va_end(args);
 
     // Ensure null-termination
-    if (len < 0 || len >= sizeof(buffer)) {
+    if (len < 0) {
+      buffer[0] = '\0';
+      return -1;
+    }
+    
+    // Ensure null-termination
+    // Must be +ve to reach here
+    if((uint32_t)len >= sizeof(buffer)) {
         len = sizeof(buffer) - 1;
         buffer[len] = '\0';
     }
@@ -62,6 +70,8 @@ int uart_printf(const char *format, ...)
     if(lpuart_rtos_handle.txSemaphore != NULL) {
       return LPUART_RTOS_Send(&lpuart_rtos_handle, (uint8_t *)buffer, len);
     }
+
+    return 0;
 }
 
 void logi(const char *format, ...)

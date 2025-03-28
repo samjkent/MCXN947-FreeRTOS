@@ -1,41 +1,44 @@
 #include "model.h"
 #include "FreeRTOS.h"
-#include "task.h"
-#include <stdio.h>
-#include "inference.h"
 #include "debug_log_callback.h"
+#include "inference.h"
+#include "task.h"
 #include "uart.h"
+#include <stdio.h>
+
+#include "images.h"
 
 // Task handle
 TaskHandle_t xInferTaskHandle = NULL;
 
-void tflite_print(const char *string)
-{
-  return uart_printf(string);
-}
+void tflite_print(const char *string) { return uart_printf(string); }
 
 // FreeRTOS task for inference
 void vInferenceTask(void *pvParameters) {
-  // Initialize the TFLite model
+  float result = 0.0f;
 
+  // Initialize the TFLite model
   logi("Registering debug_log_callback");
   RegisterDebugLogCallback(tflite_print);
 
   init_model();
- 
+
   while (1) {
     // Wait for notification to start inference
     uint32_t ulNotificationValue;
-    // if (xTaskNotifyWait(0, 0, &ulNotificationValue, portMAX_DELAY) == pdTRUE) {
-      logi("Running inference on new image");
+    // if (xTaskNotifyWait(0, 0, &ulNotificationValue, portMAX_DELAY) == pdTRUE)
+    // {
+    logi("Running inference on new image");
 
-      // Run the model inference
-      // int result = run_inference();
+    // Run the model inference
+    result = run_inference(input_data_0, sizeof(input_data_0));
+    logi("Image: Cat; Inference result: %f", result);
 
-      // Print the classification result
-      // printf("Inference result: %d\n", result);
+    result = run_inference(input_data_1, sizeof(input_data_1));
+    logi("Image: Not Cat; Inference result: %f", result);
+
     // }
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(portMAX_DELAY));
   }
 }
 

@@ -1,11 +1,12 @@
+#include "inference.h"
 #include "cat.h"
 #include "tensorflow/lite/c/common.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
 #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
 #include "tensorflow/lite/schema/schema_generated.h"
-#include <iostream>
-#include "inference.h"
 #include "uart.h"
+#include <iostream>
+#include <math.h> // for expf
 
 constexpr int kTensorArenaSize = 200 * 1024; // 250KB (adjust as needed)
 uint8_t tensor_arena[kTensorArenaSize];
@@ -57,25 +58,58 @@ int init_model() {
   return 0;
 }
 
-void run_inference(void *ptr) {
-  /* Convert from uint8 picture data to int8 */
-  for (int i = 0; i < 224 * 224; i++) {
-    input->data.int8[i] = ((uint8_t *)ptr)[i] ^ 0x80;
+float run_inference(void *ptr, uint32_t len) {
+  if (len < (144 * 144 * 3)) {
+    MicroPrintf("Invalid input size. Array length %lu", len);
+    return 0.0f;
+  }
+
+  /* Load picture data to input tensor */
+  MicroPrintf("Input shape: %d x %d x %d", input->dims->data[1],
+              input->dims->data[2], input->dims->data[3]);
+
+  MicroPrintf("Loading picture data to input tensor. Length %lu", len);
+  for (int i = 0; i < 144 * 144 * 3; i++) {
+    input->data.int8[i] = ((int8_t *)ptr)[i];
+  }
+
+  MicroPrintf("Input type: %d", input->type);
+  MicroPrintf("Input scale: %f, zero_point: %d", input->params.scale,
+              input->params.zero_point);
+
+  for (int i = 0; i < 20; i++) {
+    MicroPrintf("input[%d] = %d", i, input->data.int8[i]);
   }
 
   // Run the model on this input and make sure it succeeds.
   if (kTfLiteOk != interpreter->Invoke()) {
-    MicroPrintf("Invoke failed.");
+    return 0.0f;
   }
 
   TfLiteTensor *output = interpreter->output(0);
+  int8_t cat_score_q = output->data.int8[0];
+  int8_t not_cat_score_q = output->data.int8[1];
 
-  // Process the inference results.
-  int8_t person_score = output->data.uint8[0];
-  int8_t no_person_score = output->data.uint8[1];
+  float scale = output->params.scale;
+  int zero_point = output->params.zero_point;
 
-  float person_score_f =
-      (person_score - output->params.zero_point) * output->params.scale;
-  float no_person_score_f =
-      (no_person_score - output->params.zero_point) * output->params.scale;
+  float cat_score = (cat_score_q - zero_point) * scale;
+  float not_cat_score = (not_cat_score_q - zero_point) * scale;
+
+  MicroPrintf("Cat: %f, Not Cat: %f", cat_score, not_cat_score);
+
+  MicroPrintf("Raw output int8: cat = %d, not_cat = %d", cat_score_q,
+              not_cat_score_q);
+
+  float e_cat = expf(cat_score);
+  float e_not_cat = expf(not_cat_score);
+  float sum = e_cat + e_not_cat;
+
+  float softmax_cat = e_cat / sum;
+  float softmax_not_cat = e_not_cat / sum;
+
+  MicroPrintf("Softmax → Cat: %.5f, Not Cat: %.5f", softmax_cat,
+              softmax_not_cat);
+
+  return cat_score;
 }
