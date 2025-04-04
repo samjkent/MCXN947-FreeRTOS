@@ -13,6 +13,15 @@ TaskHandle_t xInferTaskHandle = NULL;
 
 void tflite_print(const char *string) { return uart_printf(string); }
 
+void check_result(float result) {
+  // Check if the result is greater than 0.5
+  if (result > 0.5f) {
+    logi("Cat detected");
+  } else {
+    logi("Dog detected");
+  }
+}
+
 // FreeRTOS task for inference
 void vInferenceTask(void *pvParameters) {
   float result = 0.0f;
@@ -32,10 +41,16 @@ void vInferenceTask(void *pvParameters) {
 
     // Run the model inference
     result = run_inference(input_data_0, sizeof(input_data_0));
-    logi("Image: Cat; Inference result: %f", result);
+    logi("Image: Dog");
+    check_result(result);
 
     result = run_inference(input_data_1, sizeof(input_data_1));
-    logi("Image: Not Cat; Inference result: %f", result);
+    logi("Image: Dog");
+    check_result(result);
+
+    result = run_inference(input_data_3, sizeof(input_data_1));
+    logi("Image: Cat");
+    check_result(result);
 
     // }
     vTaskDelay(pdMS_TO_TICKS(portMAX_DELAY));

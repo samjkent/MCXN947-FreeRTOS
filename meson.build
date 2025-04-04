@@ -218,6 +218,7 @@ main_inc = include_directories(
 )
 
 main_src = files(
+    'model/cat.c',
     'src/blinky.c',
     'src/clock_config.c',
     'src/flexspi.c',
